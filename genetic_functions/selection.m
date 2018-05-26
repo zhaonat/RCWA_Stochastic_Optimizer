@@ -5,10 +5,12 @@
 % individual in population
 % =====================
 
-function [reduced_population, max_individual, fitnesses] = selection(population, selection_rate)
+function [reduced_population, max_individual, fitnesses] =...
+    selection(population, selection_rate)
     %always take the top 50% with the HIGHEST fitness
     %first, get all fitnesses into a list (we'll just use it to get the
     %median)
+    
     fitnesses = [];
     for i = 1:length(population)
         fitnesses(i) = population{i}.Fitness;

@@ -9,7 +9,12 @@ function generation_offspring = mate_population(population)
          end
          parent1 = population{i};
          parent2 = population{i+1};
+         
+         %% ============================================================%%
+         % want to carefully engineer this
          children  = mate_individuals(parent1, parent2);
+         %% ============================================================%%
+         
          generation_offspring{c} = children{1};
          c = c+1;
          generation_offspring{c} = children{2};
