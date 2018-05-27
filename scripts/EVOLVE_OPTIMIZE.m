@@ -9,6 +9,8 @@ close all
 silicon = 12*eye(3);
 air = eye(3);
 glass = 3*eye(3);
+
+
 layer1 = {silicon, air, silicon};
 layer2 = {glass, air, glass};
 
@@ -18,6 +20,8 @@ structure2 = {layer2, layer1};
 scaling = (1/3);
 layer_structure_specification = {scaling*[1,1,1], scaling*[1,1,1]};
 
+% for frequency dependent dielectric, the elements in each layer should be 
+% be a function, not a tensor
 
 %% specify parameters of the simulation
 lattice_constant = 1; %microns

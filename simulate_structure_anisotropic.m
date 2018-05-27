@@ -14,7 +14,7 @@ function [Ref, Tran] = simulate_structure_anisotropic(structure, lambda,...
     %% get properties that are not frequency dependent
     [f, periods] = structure.convert_to_RCWA();
     
-    %% enter wavelength loop
+    %% enter wavelength loop: cannot do any frequency dependence here
     for i =1:length(lambda)  %um microns
         
         for layer = 1:structure.num_layers
@@ -23,9 +23,9 @@ function [Ref, Tran] = simulate_structure_anisotropic(structure, lambda,...
               % create dielectric    
               for ribbon = 1:length(structure_specification)
                   eps = eps_tensors{ribbon};
-                  e_m_x{layer}(ribbon) =  eps(1,1);
-                  e_m_y{layer}(ribbon) =  eps(2,2);
-                  e_m_z{layer}(ribbon) =  eps(3,3);
+                  e_m_x{layer}(ribbon) =  eps(1,1,i);
+                  e_m_y{layer}(ribbon) =  eps(2,2,i);
+                  e_m_z{layer}(ribbon) =  eps(3,3,i);
               end
 
         end %exit layer loop

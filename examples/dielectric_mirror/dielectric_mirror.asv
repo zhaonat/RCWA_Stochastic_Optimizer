@@ -1,0 +1,23 @@
+
+%% generate dielectric distributions
+
+num_layers = 2;
+c0=3e8;
+num_wavelengths = 400;
+lambda_scan = linspace(1.5, 3, num_wavelengths);
+w_scan = 2*pi*c0./lambda_scan*1e6;
+
+lattice_constant = 1;
+
+%% =================== construct tensor volumes =========================%%
+silicon = 12*ones(1, num_wavelengths);
+air = 1*ones(1, num_wavelengths);
+glass = 3*eye(3);
+
+% need to create a layer repository
+layer1 = {silicon, air, silicon};
+layer2 = {glass, air, glass};
+
+structure1 = {layer1, layer2}; %stack of layers
+structure2 = {layer2, layer1};
+
