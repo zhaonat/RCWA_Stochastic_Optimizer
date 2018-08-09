@@ -10,7 +10,6 @@ silicon = 12*eye(3);
 air = eye(3);
 glass = 3*eye(3);
 
-
 layer1 = {silicon, air, silicon};
 layer2 = {glass, air, glass};
 
@@ -29,6 +28,7 @@ lambda_range = linspace(1.5, 2.5, 100); %also microns
 num_ord = 10;
 theta = 0; % angle of incidence
 e = [1,1];
+
 %% specify parameters of the population and the genetic evolution
 num_individuals = 4; %always specify num_individuals to be divisible by 4
 epochs = 100;

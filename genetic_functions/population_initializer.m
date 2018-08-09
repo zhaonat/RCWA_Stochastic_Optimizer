@@ -1,7 +1,7 @@
 
 
 function [population] = population_initializer(num_individuals,...
-    lattice_constant, num_layers_range, thickness_range, ...
+    lattice_constant, thickness_range, ...
     layer_dielectric_tensor_distribution, layer_structure_distribution)
         %{
             in order for this function to have a broad level of
@@ -26,30 +26,34 @@ function [population] = population_initializer(num_individuals,...
     %2) start adding individuals
     for ind = 1:num_individuals
         
-        % generate number of layers
-        num_layers = randi(num_layers_range, 1);
-        layer_thicknesses = [];
-        for layer = 1:num_layers
-            %for each layer
-            Delta = thickness_range(1)+rand(1)*abs(diff(thickness_range));
-            layer_thicknesses(layer) = Delta;
-            
-        end
-        
-        %% selection of layer structure
-        l1 = length(layer_structure_distribution);
-        sampled_index = randi([1, l1], 1);
-        layer_structure = layer_structure_distribution{sampled_index};
-        
-        %% selection of the dielectric tensor arrangement
+
+        %% selection of the dielectric tensor arrangement: determines num_layers
         l1 = length(layer_dielectric_tensor_distribution);
         sampled_index = randi([1, l1], 1);
         layer_dielectric_tensors = ...
             layer_dielectric_tensor_distribution{sampled_index};
         
+        num_layers = length(layer_dielectric_tensors);
+
+        %% generate thickness r of layers and select layer distribution
+        layer_thicknesses = [];
+        layer_structure = cell(1);
+        for layer = 1:num_layers
+            %generate thickness
+            Delta = thickness_range(1)+rand(1)*abs(diff(thickness_range));
+            layer_thicknesses(layer) = Delta;
+            
+            % select the layer structure from distribution
+            sample = randi([1,length(layer_structure_distribution)],1);
+            layer_structure{layer} = layer_structure_distribution{sample};
+            
+        end
+        
+       
+        
         %% generate individual and add to the pop list
         individual_i = layered_structure_class(num_layers, lattice_constant, ...
-              layer_dielectric_tensors, layer_structure, layer_thicknesses)
+              layer_dielectric_tensors, layer_structure, layer_thicknesses);
         population.immature_population{ind} = individual_i;
           
     end
