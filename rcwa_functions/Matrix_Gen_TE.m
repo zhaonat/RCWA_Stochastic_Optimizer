@@ -5,7 +5,7 @@
 % Last modified by Bo Zhao (September 2017)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [Q,V,W] = Matrix_Gen_TE(e_m,f, Period, e1,lambda, theta, Num_ord)
+function [Q,V,W,Kx2,E, epsilonG] = Matrix_Gen_TE(e_m,f, Period, e1,lambda, theta, Num_ord)
     ordMin=-Num_ord;
     ordMax=Num_ord;
     ordDif=2*Num_ord+1;

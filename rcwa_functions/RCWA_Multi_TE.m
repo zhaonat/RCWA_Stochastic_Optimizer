@@ -7,7 +7,7 @@
 %RCWA for TE wave
 %Multiyayer Grating
 
-function [Ref,Tran]=RCWA_Multi_TE(N, e_m,ff, Period, d, e, lambda, theta, Num_ord)
+function [Ref,Tran,Q,V,W,f,g,kxi,Kx2,E, epsilonG,X]=RCWA_Multi_TE(N, e_m,ff, Period, d, e, lambda, theta, Num_ord)
                                   
 % Output: Reflectance, Transmittance
 % Input: N: layer number, 
@@ -35,8 +35,8 @@ function [Ref,Tran]=RCWA_Multi_TE(N, e_m,ff, Period, d, e, lambda, theta, Num_or
     kxi = k0*(sqrt(e(1))*sin(theta)+i*lambda/Period(1)); %kxi (1_by_i vector)
     
     for ind=1:N
-        [Q{ind},V{ind},W{ind}]=Matrix_Gen_TE(e_m{ind},ff{ind},Period(ind), e(1), lambda, theta, Num_ord);
-        X{ind} = diag(exp(-k0*d(ind)*eig(Q{ind})));
+        [Q{ind},V{ind},W{ind},Kx2,E, epsilonG]=Matrix_Gen_TE(e_m{ind},ff{ind},Period(ind), e(1), lambda, theta, Num_ord);
+        X{ind} = diag(exp(-k0*d(ind)*diag(Q{ind})));
         O{ind}=[W{ind}, W{ind}; V{ind}, -V{ind}];
     end
 
@@ -51,13 +51,13 @@ function [Ref,Tran]=RCWA_Multi_TE(N, e_m,ff, Period, d, e, lambda, theta, Num_or
     f{N+1}=I;
     g{N+1}=j*Ysub;
     for ind = N:-1:1
-        Mat_ab = inv(O{ind})*[f{ind+1}; g{ind+1}];
+        Mat_ab = (O{ind})\[f{ind+1}; g{ind+1}];
         a{ind} = Mat_ab(1:ordDif,:);
         b{ind} = Mat_ab(ordDif+1:2*ordDif,:);
-        f{ind} = W{ind}*(I+X{ind}*a{ind}*inv(b{ind})*X{ind});
-        g{ind} = V{ind}*(-I+X{ind}*a{ind}*inv(b{ind})*X{ind});
+        f{ind} = W{ind}*(I+X{ind}*a{ind}*(b{ind}\X{ind}));
+        g{ind} = V{ind}*(-I+X{ind}*a{ind}*(b{ind}\X{ind}));
     end
-    T1 = inv(j*Yinc*f{1}+g{1})*(j*Yinc*Dirac_del+j*sqrt(e(1))*cos(theta)*Dirac_del);
+    T1 = (j*Yinc*f{1}+g{1})\(j*Yinc*Dirac_del+j*sqrt(e(1))*cos(theta)*Dirac_del);
     R = f{1}*T1-Dirac_del;
     
     T = T1;
