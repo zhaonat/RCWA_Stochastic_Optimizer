@@ -11,7 +11,7 @@ function mutated_population = mutate_population(population, mutation_rate)
         
         if(rand() < mutation_rate)
             %% ======== insert your mutation function right here ============
-            perturbation = 0.01;
+            perturbation = 0.1;
             mutant = mutate_layer_thicknesses(structure, perturbation); % mutant = individual does nothing
 
             %% ===============================================================

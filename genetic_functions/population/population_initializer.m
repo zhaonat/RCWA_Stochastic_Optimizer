@@ -1,4 +1,7 @@
 
+%% initializes population given a size, a lattice_constant, thickness_range
+%% layer_dielectric_tensor_distribution and structure_distributions are
+%% CELLS containing a pool of initial structures which are LEFT UP TO THE USER 
 
 function [population] = population_initializer(num_individuals,...
     lattice_constant, thickness_range, ...
@@ -11,7 +14,6 @@ function [population] = population_initializer(num_individuals,...
     
             num_individuals = pop size
             lattice_constant is fixed obviously
-            num_layers_range: [min, max]
             thickness_range: [min, max]
     
             % these are ARRAYS of cells, each cell has a layer dielectric

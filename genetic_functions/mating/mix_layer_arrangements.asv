@@ -18,9 +18,9 @@ function [child1, child2] = mix_layer_arrangements(structure1, structure2)
     split1 = randi([1, l1],1);
     split2 = randi([1, l2],1);
     
-    [ls3, ls4] = partition_cell(ls1, ls2, split1, split2); %partition structure
-    [lt3, lt4] = partition_array(lt1, lt2, split1, split2); %parition thicknesses
-    [ldt3, ldt4] = partition_cell(ldt1, ldt2, split1, split2); %partition dielectric specs
+    [ls3, ls4] = partition_cell(ls1, ls2, split1, split2);
+    [lt3, lt4] = partition_array(lt1, lt2, split1, split2);
+    [ldt3, ldt4] = partition_cell(ldt1, ldt2, split1, split2);
     
     lattice_constant = structure1.lattice_constant;
     num_layers1 = length(ls3);
