@@ -1,30 +1,49 @@
 
 function optimized_individuals = line_search_individual(layered_structure_instance, ...
-    lambda_scan, theta, num_ord, e, desired_reflection)
+    lambda_scan, theta, num_ord, e, desired_reflection, num_searches, alpha, max_optimized_individuals)
+
+    if(nargin <9)
+       max_optimized_individuals = 5; % we specify a maximum number of poptimized individuals..
+    end
+    if(nargin < 8)
+       alpha = 0.5; %parameter to determine how much you deviate from original thickness to probe for better structures
+    end
+
+    if(nargin < 7)
+       num_searches = 20; 
+    end
     
     %probe slight variations of the thickness, if it improves upont the
-    %fitness, add the 
-    max_optimized_individuals = 5;
+    %fitness, add the optimized individual to the cell below, which will
+    %then be added into the population
     optimized_individuals = cell(1);
-    num_searches = 20;
-    c = 1;
+    c = 1; % c is just a counter to COUNT the number of new individuals with superior fitness
+           % based on the line search for the thicknesses.
+    % iterate through layers of each structure
     for i = 1:length(layered_structure_instance.num_layers)
-        original_thickness = layered_structure_instance.layer_thicknesses(i);
-        alpha = 0.5;
-        deviation = original_thickness*alpha;
-        original_fitness = layered_structure_instance.Fitness
+        original_thickness = layered_structure_instance.layer_thicknesses(i); 
+        deviation = original_thickness*alpha;  %actual deviation to probe;
+        original_fitness = layered_structure_instance.Fitness; % original fitness
+        
+        % now we iterate from -deviation to + deviation
         for delta = linspace(-deviation, deviation, num_searches)
-            structure_copy = layered_structure_instance;
-            structure_copy.layer_thicknesses(i) = original_thickness+delta;
-            [Ref, ~] = simulate_structure_anisotropic(structure_copy, ...
+            structure_copy = layered_structure_instance; %copy the structure
+            structure_copy.layer_thicknesses(i) = original_thickness+delta; %change the thickness at layer i to original thickness plus minus |deviation|
+            
+            %% RESIMULATE
+            [Ref, ~] = simulate_structure_anisotropic(structure_copy, ... 
                 lambda_scan, theta, num_ord, e);
-            fitness = evaluate_fitness(Ref, desired_reflection)
+            fitness = evaluate_fitness(Ref, desired_reflection);
+            
+            %% check if fitness greater than original
             if(fitness>original_fitness)
+                %^ if it is, we add it to this optimized individuals...
                 optimized_individuals{c} = structure_copy;
                 c = c+1;
             end
             
         end
+        %limit the number of optimized individuals you can add...
         if(c> max_optimized_individuals)
            break; 
         end
